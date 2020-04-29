@@ -1,31 +1,44 @@
 const { asClass, createContainer, asFunction, asValue} = require('awilix')
+
+// App Start
 const StartUp = require('./startup')
 const Server = require('./server')
-const { UserController } = require('../api/controllers')
+const config = require('../config/environments')
+
+// Routes
 const Routes = require("../api/routes")
-const config = require('../config/environments');
 const UserRoutes = require('../api/routes/user.routes')
+
+// Business
+const { UserBusiness } = require('../domain');
+
+// Controllers
+const { UserController } = require('../api/controllers')
+
+// Services
 const { UserService } = require('../services')
+
+// Repositories
 const { UserRepository } = require('../dal/repositories')
+
+// DBD
 const db = require('../dal/entities')
 
 const container = createContainer()
+
 container
   .register({
     app: asClass(StartUp).singleton(),
-    server: asClass(Server).singleton()
-  })
-  .register({
-    UserController: asClass(UserController).singleton()
-  })
-  .register({
     router: asFunction(Routes).singleton(),
+    server: asClass(Server).singleton(),
+    UserController: asClass(UserController).singleton(),
+    UserRoutes: asFunction(UserRoutes).singleton()
   })
   .register({
     config: asValue(config)
   })
   .register({
-    UserRoutes: asFunction(UserRoutes).singleton()
+    db: asValue(db)
   })
   .register({
     UserService: asClass(UserService).singleton()
@@ -33,7 +46,7 @@ container
   .register({
     UserRepository: asClass(UserRepository).singleton()
   }).register({
-    db: asValue(db)
+    UserBusiness: asClass(UserBusiness).singleton()
   })
 
 module.exports = container
