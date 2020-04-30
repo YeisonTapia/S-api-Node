@@ -1,38 +1,44 @@
-const { asClass, createContainer, asFunction, asValue} = require('awilix')
+const { asClass, createContainer, asFunction, asValue } = require("awilix");
 
-// App Start
-const StartUp = require('./startup')
-const Server = require('./server')
-const config = require('../config/environments')
+// app start
+const StartUp = require("./startup");
+const Server = require("./server");
+const config = require("../config/environments");
 
-// Routes
-const Routes = require("../api/routes")
-const UserRoutes = require('../api/routes/user.routes')
+// routes
+const Routes = require("../api/routes");
+const StudentRoutes = require("../api/routes/student.routes");
+const TeacherRoutes = require("../api/routes/teacher.routes");
+const CourseRoutes = require("../api/routes/course.routes");
 
-// Business
-const { UserBusiness } = require('../domain');
+// business
+const { StudentBusiness, TeacherBusiness, CourseBusiness } = require("../domain/");
 
-// Controllers
-const { UserController } = require('../api/controllers')
+// controllers
+const { StudentController, TeacherController, CourseController } = require("../api/controllers");
 
-// Services
-const { UserService } = require('../services')
+// services
+const { StudentService, TeacherService, CourseService } = require("../services");
 
-// Repositories
-const { UserRepository } = require('../dal/repositories')
+// repositories
+const { StudentRepository, TeacherRepository, CourseRepository } = require("../dal/repositories");
 
-// DBD
-const db = require('../dal/entities')
+// db
+const db = require("../dal/models");
 
-const container = createContainer()
+const container = createContainer();
 
 container
   .register({
     app: asClass(StartUp).singleton(),
     router: asFunction(Routes).singleton(),
     server: asClass(Server).singleton(),
-    UserController: asClass(UserController).singleton(),
-    UserRoutes: asFunction(UserRoutes).singleton()
+    StudentController: asClass(StudentController).singleton(),
+    StudentRoutes: asFunction(StudentRoutes).singleton(),
+    TeacherController: asClass(TeacherController).singleton(),
+    TeacherRoutes: asFunction(TeacherRoutes).singleton(),
+    CourseController: asClass(CourseController).singleton(),
+    CourseRoutes: asFunction(CourseRoutes).singleton()
   })
   .register({
     config: asValue(config)
@@ -41,12 +47,19 @@ container
     db: asValue(db)
   })
   .register({
-    UserService: asClass(UserService).singleton()
+    StudentService: asClass(StudentService).singleton(),
+    TeacherService: asClass(TeacherService).singleton(),
+    CourseService: asClass(CourseService).singleton()
   })
   .register({
-    UserRepository: asClass(UserRepository).singleton()
-  }).register({
-    UserBusiness: asClass(UserBusiness).singleton()
+    StudentRepository: asClass(StudentRepository).singleton(),
+    TeacherRepository: asClass(TeacherRepository).singleton(),
+    CourseRepository: asClass(CourseRepository).singleton()
   })
+  .register({
+    StudentBusiness: asClass(StudentBusiness).singleton(),
+    TeacherBusiness: asClass(TeacherBusiness).singleton(),
+    CourseBusiness: asClass(CourseBusiness).singleton()
+  });
 
-module.exports = container
+module.exports = container;
