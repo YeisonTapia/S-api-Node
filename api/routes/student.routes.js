@@ -1,13 +1,13 @@
 const { Router } = require("express");
 
-module.exports = function({ StudentController }) {
+module.exports = function ({ StudentController }) {
   const router = Router();
 
-  router.get("/", StudentController.getStudents.bind(StudentController));
-  router.get("/:id", StudentController.getStudent.bind(StudentController));
-  router.post("/", StudentController.createStudent.bind(StudentController));
-  router.put("/:id", StudentController.updateStudent.bind(StudentController));
-  router.delete("/:id", StudentController.deleteStudent.bind(StudentController));
+  router.get("/", StudentController.index.bind(StudentController));
+  router.get("/:id", StudentController.show.bind(StudentController));
+  router.post("/", StudentController.store.bind(StudentController));
+  router.put("/:id", StudentController.update.bind(StudentController));
+  router.delete("/:id", StudentController.delete.bind(StudentController));
 
   return router;
 };
